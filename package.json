@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/antonioaguiar/game/issues"
   },
-  "homepage": "https://github.com/antonioaguiar/game#readme"
+  "homepage": "https://github.com/antonioaguiar/game#readme",
+  "dependencies": {
+    "ngx": "^2.4.0"
+  }
 }
