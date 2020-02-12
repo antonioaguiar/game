@@ -1,4 +1,6 @@
-//CAMADA DE APRESENTAÇÃO
+/*
+* Camada de apresentação, monta a tela e os elementos
+*/
 const screen = document.getElementById('screen');
 const context = screen.getContext('2d');
 

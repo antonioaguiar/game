@@ -1,6 +1,8 @@
 
+/*
+* Regras de funcionamento do jogo e tratamento das teclas
+*/
 function createGame() {
-
 
     function movePlayer(command) {
         console.log(`Moving ${command.playerId} with ${command.keyPressed}`);

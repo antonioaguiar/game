@@ -1,3 +1,7 @@
+/*
+* Camada de inputs - faz a leitura do teclado e notifica a todos os
+* observers quanto um evento acontece.
+*/
 function createKeyboardListener() {
     const state = {
         observers: []

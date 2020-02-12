@@ -22,7 +22,7 @@
     <script src="js/apresentacao.js"></script>
     <script src="js/inputs.js"></script>
     <script src="js/logicajogo.js"></script>
-    
+
     <script>
         
         //criar jogadores e frutas
@@ -38,15 +38,16 @@
 
         //setar o jogador atual
         var currentPlayer = 'player1';
-
-        //iniciar o game
+        
+        //iniciar o game - camada lógica
         const game = createGame();
-        const keyboardListener = createKeyboardListener();
-
-        //registrar o game.movePlayer como um Observer
+        
+        //inciar os listeners da camada de inputs
+        const keyboardListener = createKeyboardListener();        
+        //registrar observers
         keyboardListener.subscribe(game.movePlayer);
 
-        //mostrar a tela e os elementos do jogo
+        //mostrar camada de apresentação
         renderScreen();
 
 
