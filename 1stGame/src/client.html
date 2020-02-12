@@ -6,7 +6,7 @@
     <title>Meu primeiro jogo multiplayer</title>
     <style>
         #screen {
-            border: 1px solid #ccc;
+            border: 10px solid #ccc;
             image-rendering: pixelated;
             image-rendering: crisp-edges;
             image-rendering: -moz-crisp-edges;
@@ -19,31 +19,24 @@
 <body>
     <canvas id="screen" width="10" height="10"></canvas>
 
+    <script src="js/logicajogo.js"></script>
     <script src="js/apresentacao.js"></script>
     <script src="js/inputs.js"></script>
-    <script src="js/logicajogo.js"></script>
+   
 
     <script>
-        
-        //criar jogadores e frutas
-        const state = {
-            players: {
-                'player1': { x: 5, y: 5 },
-                'player2': { x: 8, y: 5 },
-            },
-            fruits: {
-                'fruit1': { x: 4, y: 1 }
-            }
-        }
- 
+
+
         //setar o jogador atual
         var currentPlayer = 'player1';
-        
+
         //iniciar o game - camada lógica
         const game = createGame();
-        
+        const command = {playerId: currentPlayer, playerX:1, playerY: 1};
+        game.addPlayer(command);
+ 
         //inciar os listeners da camada de inputs
-        const keyboardListener = createKeyboardListener();        
+        const keyboardListener = createKeyboardListener();
         //registrar observers
         keyboardListener.subscribe(game.movePlayer);
 
