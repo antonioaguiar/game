@@ -18,12 +18,12 @@ game.subscribe((command) => {
     sockets.emit(command.type, command);
 });
 
-game.addPlayer({ playerId: "aguiar", playerX: 1, playerY: 1 });
-game.addPlayer({ playerId: "player1", playerX: 5, playerY: 5 });
-game.addPlayer({ playerId: "player2", playerX: 6, playerY: 7 });
+//game.addPlayer({ playerId: "aguiar", playerX: 1, playerY: 1 });
+//game.addPlayer({ playerId: "player1", playerX: 5, playerY: 5 });
+//game.addPlayer({ playerId: "player2", playerX: 6, playerY: 7 });
 
-game.addFruit({ fruitId: "pera", fruitX: 7, fruitY: 7 });
-game.addFruit({ fruitId: "maçâ", fruitX: 3, fruitY: 4 });
+//game.addFruit({ fruitId: "pera", fruitX: 7, fruitY: 7 });
+//game.addFruit({ fruitId: "maçâ", fruitX: 3, fruitY: 4 });
 
 
 // beep(20, 1000, 30);
