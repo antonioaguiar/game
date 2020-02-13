@@ -1,4 +1,3 @@
-
 /*
 * Regras de funcionamento do jogo e tratamento das teclas
 */
@@ -91,7 +90,7 @@ export default function createGame() {
                 // console.log(`checking ${playerId}>${player.x}x${player.y} and ${fruitId}>${fruit.x}x${fruit.y}`);
 
                 if (player.x === fruit.x && player.y === fruit.y){
-                    console.log(`COLLISION between ${player.playerId} and ${fruitId}`);
+                    console.log(`COLLISION between ${playerId} and ${fruitId}`);
                     removeFruit({fruitId: fruitId});
                     
                     beep(20, 1000, 30);
