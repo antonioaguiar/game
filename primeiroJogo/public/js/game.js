@@ -7,52 +7,103 @@ export default function createGame() {
     const state = {
         players: {},
         fruits: {},
-        screen: {width: 10, height: 10}
+        screen: { width: 10, height: 10 }
+    }
+
+    const observers = [];
+
+    //gerar nova fruta
+    function start() {
+        const frequencia = 2000; // 2 segundos
+
+        setInterval(addFruit, frequencia);
+    }
+
+    function subscribe(observerFunction) {
+        observers.push(observerFunction);
+    }
+
+    function notifyAll(command) {
+        // console.log(`Notifying ${state.observers.length} observers`);
+        for (const observerFunction of observers) {
+            observerFunction(command);
+        }
     }
 
     function addPlayer(command) {
         const playerId = command.playerId
-        const playerX = command.playerX;
-        const playerY = command.playerY;
+        const playerX = 'playerX' in command ? command.playerX : Math.floor(Math.random() * state.screen.width);
+        const playerY = 'playerY' in command ? command.playerY : Math.floor(Math.random() * state.screen.height);
         state.players[playerId] = {
             x: playerX,
             y: playerY
         };
-    }
 
-    function addFruit(command){
-        const fruitId = command.fruitId
-        const fruitX = command.fruitX;
-        const fruitY = command.fruitY;
-        state.fruits[fruitId] = {
-            x: fruitX,
-            y: fruitY
-        };
+        notifyAll({
+            type: 'add-player',
+            playerId: playerId,
+            playerX: playerX,
+            playerY: playerY
+        });
     }
-
 
     function removePlayer(command) {
         const playerId = command.playerId;
         delete state.players[playerId];
+
+        notifyAll({
+            type: 'remove-player',
+            playerId: playerId
+        });
+    }
+
+    function addFruit(command) {
+
+        const fruitId = command ? command.fruitId : Math.floor(Math.random() * 10000000);
+        const fruitX = command ? command.fruitX : Math.floor(Math.random() * state.screen.width);
+        const fruitY = command ? command.fruitY : Math.floor(Math.random() * state.screen.height);
+
+        state.fruits[fruitId] = {
+            fruitId: fruitId,
+            x: fruitX,
+            y: fruitY
+        };
+
+        notifyAll({
+            type: 'add-fruit',
+            fruitId: fruitId,
+            fruitX: fruitX,
+            fruitY: fruitY
+        });
     }
 
     function removeFruit(command) {
         const fruitId = command.fruitId;
         delete state.fruits[fruitId];
+
+        notifyAll({
+            type: 'remove-fruit',
+            fruitId: fruitId
+        });
+    }
+
+    function setState(newState) {
+        Object.assign(state, newState);
     }
 
 
     function movePlayer(command) {
         //console.log(`Moving ${command.playerId} with ${command.keyPressed}`);
+        notifyAll(command);
 
         const acceptedMovies = {
             ArrowUp(player) {
                 //console.log('Moving player UP');
-                player.y =  player.y - 1 >= 0 ? player.y - 1 : 0;
+                player.y = player.y - 1 >= 0 ? player.y - 1 : 0;
             },
             ArrowDown(player) {
                 //console.log('Moving player Down');
-                player.y = player.y + 1 < state.screen.width ? player.y + 1 : state.screen.width - 1 ;
+                player.y = player.y + 1 < state.screen.width ? player.y + 1 : state.screen.width - 1;
             },
             ArrowLeft(player) {
                 //console.log('Moving player Left');
@@ -60,7 +111,7 @@ export default function createGame() {
             },
             ArrowRight(player) {
                 //console.log('Moving player Right');
-                player.x =  player.x + 1 < state.screen.height  ? player.x + 1: state.screen.height - 1;
+                player.x = player.x + 1 < state.screen.height ? player.x + 1 : state.screen.height - 1;
             }
         }
 
@@ -70,7 +121,7 @@ export default function createGame() {
         const player = state.players[playerId];
         const moveFunction = acceptedMovies[keyPressed];
 
-        if (moveFunction && player){
+        if (moveFunction && player) {
             moveFunction(player);
             checkForFruitCollision(playerId);
         }
@@ -78,39 +129,19 @@ export default function createGame() {
         return
     }
 
-    //a implementação original passa somente o ID, mas depois na função vai
-    //buscar no array o objeto do player corresnpondente ao ID, mas pra que
-    //se já temos o "cara" quando moveu?
-    function checkForFruitCollision(playerId){
-        //for(const playerId in state.players){
-            const player = state.players[playerId];
-            
-            for(const fruitId in state.fruits){
-                const fruit = state.fruits[fruitId];
-                // console.log(`checking ${playerId}>${player.x}x${player.y} and ${fruitId}>${fruit.x}x${fruit.y}`);
+    function checkForFruitCollision(playerId) {
+        const player = state.players[playerId];
 
-                if (player.x === fruit.x && player.y === fruit.y){
-                    console.log(`COLLISION between ${playerId} and ${fruitId}`);
-                    removeFruit({fruitId: fruitId});
-                    
-                    beep(20, 1000, 30);
-                    //teste
-                    //gerar nova fruta
-                    const newFruitId = Math.floor(Math.random() * 1000);
-                    const newFruitX = Math.floor(Math.random() * 10);
-                    const newFruitY = Math.floor(Math.random() * 10);
-                    const novaFruta = {fruitId: newFruitId, fruitX: newFruitX, fruitY: newFruitY};
-                    addFruit(novaFruta);
-                }
+        for (const fruitId in state.fruits) {
+            const fruit = state.fruits[fruitId];
+            if (player.x === fruit.x && player.y === fruit.y) {
+                console.log(`COLLISION between ${playerId} and ${fruitId}`);
+                removeFruit({ fruitId: fruitId });
             }
-
-        //} 
+        }
     }
 
     //pesquisar ** QuadTree **
-    
-    
-
 
     return {
         addPlayer,
@@ -118,11 +149,14 @@ export default function createGame() {
         addFruit,
         removeFruit,
         movePlayer,
-        state
+        state,
+        setState,
+        subscribe,
+        start
     }
 }
 
-
+/*
 const a = new AudioContext() // browsers limit the number of concurrent audio contexts, so you better re-use'em
 
 function beep(vol, freq, duration) {
@@ -136,3 +170,4 @@ function beep(vol, freq, duration) {
     v.start(a.currentTime)
     v.stop(a.currentTime + duration * 0.001)
 }
+*/
