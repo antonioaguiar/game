@@ -18,30 +18,31 @@
 
 <body>
     <canvas id="screen" width="10" height="10"></canvas>
+ 
 
-    <script src="js/logicajogo.js"></script>
-    <script src="js/apresentacao.js"></script>
-    <script src="js/inputs.js"></script>
-   
-
-    <script>
-
-
-        //setar o jogador atual
-        var currentPlayer = 'player1';
+    <script type="module">
+        import createGame from './js/game.js';
+        import createKeyboardListener from './js/keyboardListener.js';
+        import renderScreen from './js/screen.js';
+        
+        const currentPlayer = "aguiar";
 
         //iniciar o game - camada lógica
         const game = createGame();
-        const command = {playerId: currentPlayer, playerX:1, playerY: 1};
-        game.addPlayer(command);
- 
         //inciar os listeners da camada de inputs
-        const keyboardListener = createKeyboardListener();
+        const keyboardListener = createKeyboardListener(document);
         //registrar observers
         keyboardListener.subscribe(game.movePlayer);
 
+        //tela
+        const screen = document.getElementById('screen');
         //mostrar camada de apresentação
-        renderScreen();
+        renderScreen(screen, game, requestAnimationFrame);
+                 
+        game.addPlayer({ playerId: currentPlayer, playerX: 1, playerY: 1 });
+        //para teste
+        game.addPlayer({ playerId: "player2", playerX: 5, playerY: 5 });
+        game.addFruit({ fruitId: "pera", fruitX: 7, fruitY: 7 });
 
 
     </script>

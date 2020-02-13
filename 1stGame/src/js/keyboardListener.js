@@ -2,7 +2,7 @@
 * Camada de inputs - faz a leitura do teclado e notifica a todos os
 * observers quanto um evento acontece.
 */
-function createKeyboardListener() {
+export default function createKeyboardListener(document) {
     const state = {
         observers: []
     }
@@ -12,7 +12,7 @@ function createKeyboardListener() {
     }
 
     function notifyAll(command) {
-        console.log(`Notifying ${state.observers.length} observers`);
+       // console.log(`Notifying ${state.observers.length} observers`);
 
         for (const observerFunction of state.observers) {
             observerFunction(command);
@@ -25,7 +25,7 @@ function createKeyboardListener() {
         const keyPressed = event.key;
 
         const command = {
-            playerId: currentPlayer,
+            playerId: 'aguiar',
             keyPressed
         }
 

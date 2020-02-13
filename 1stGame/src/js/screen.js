@@ -1,13 +1,12 @@
 /*
 * Camada de apresentação, monta a tela e os elementos
 */
-const screen = document.getElementById('screen');
-const context = screen.getContext('2d');
 
-function renderScreen() {
-    //clear screen
+export default function renderScreen(screen, game, requestAnimationFrame) {
+    const context = screen.getContext('2d');
+    context.fillStyle = 'white';
     context.clearRect(0, 0, 10, 10);
-
+    
     for (const playerId in game.state.players) {
         const player = game.state.players[playerId];
         context.fillStyle = 'black';
@@ -19,5 +18,7 @@ function renderScreen() {
         context.fillStyle = 'green';
         context.fillRect(fruit.x, fruit.y, 1, 1);
     }
-    requestAnimationFrame(renderScreen);
+    requestAnimationFrame(() => {
+        renderScreen(screen, game, requestAnimationFrame);
+    });
 }
